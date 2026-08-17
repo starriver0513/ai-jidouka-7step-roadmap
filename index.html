@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIで仕事を自動化するまでの7STEPロードマップ｜保存版資料</title>
+<meta name="description" content="AIで仕事を自動化するまでの7STEP（AIに慣れる→ツール理解→環境構築→ツールを繋ぐ→スキル構築→定期自動実行→自律思考）を、そのまま手を動かせる手順とコピペ用プロンプト付きでまとめた保存版資料。">
+<meta property="og:title" content="AIで仕事を自動化するまでの7STEPロードマップ｜保存版資料">
+<meta property="og:description" content="AIで仕事を自動化するまでの7STEP（AIに慣れる→ツール理解→環境構築→ツールを繋ぐ→スキル構築→定期自動実行→自律思考）を、そのまま手を動かせる手順とコピペ用プロンプト付きでまとめた保存版資料。">
+<meta name="theme-color" content="#0b2a5b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=M+PLUS+1:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   保存版資料テンプレート v2 — 青ベース / 動きあり / GitHub Pages配布用
+   使い方: 各コンポーネントは <!-- [C:名前] --> で始まる。
+           使わないブロックはコメントごと削除してよい。
+   ============================================================ */
+
+:root{
+  /* --- 色（青ベース。紫・ピンクは使わない） --- */
+  --ink:#0a1020;          /* 本文 */
+  --ink-soft:#22304a;     /* 見出し補助 */
+  --muted:#5c6880;        /* 補足文 */
+  --navy:#0b2a5b;         /* 濃紺 */
+  --blue:#0866ff;         /* 主役の青 */
+  --blue-dark:#073b9a;
+  --cyan:#28d3ff;         /* 差し色 */
+  --sky:#d9eaff;
+  --blue-soft:#eef5ff;
+  --line:#d8e4f6;
+  --bg:#f6f9ff;
+  --white:#fff;
+  --code-bg:#0b1834;      /* プロンプト枠 */
+  --ok:#0f9d58;
+  --warn:#f59e0b;
+  --grad-hero:linear-gradient(135deg,#040c22 0%,#062a68 48%,#0a63d6 100%);
+  --grad-accent:linear-gradient(135deg,var(--cyan) 0%,var(--blue) 100%);
+  --shadow:0 18px 44px rgba(8,32,80,.12);
+  --shadow-hover:0 26px 64px rgba(8,32,80,.22);
+  --radius:18px;
+  --radius-sm:12px;
+  --max:1040px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:24px}
+body{
+  margin:0;color:var(--ink);background:var(--bg);
+  font-family:'Noto Sans JP',-apple-system,BlinkMacSystemFont,'Hiragino Sans',Meiryo,sans-serif;
+  line-height:1.95;font-size:16px;overflow-x:hidden;
+  background-image:
+    radial-gradient(circle at 12% -4%,rgba(8,102,255,.10),transparent 34%),
+    radial-gradient(circle at 92% 6%,rgba(40,211,255,.10),transparent 30%);
+  background-attachment:fixed;
+}
+a{color:var(--blue);font-weight:700;text-underline-offset:3px;text-decoration-thickness:2px}
+img{max-width:100%;height:auto;display:block}
+
+/* [C:進捗バー] ページ上端のスクロール進捗 */
+.progress{position:fixed;inset:0 0 auto 0;height:4px;z-index:60;background:transparent}
+.progress span{display:block;height:100%;width:0;background:var(--grad-accent);box-shadow:0 0 14px rgba(8,102,255,.6);transition:width .1s linear}
+
+.page{width:min(var(--max),calc(100vw - 32px));margin:0 auto;padding:28px 0 96px}
+
+/* ============ [C:ヒーロー] ============ */
+.hero{position:relative;overflow:hidden;border-radius:26px;color:#fff;padding:clamp(30px,5vw,64px);background:var(--grad-hero);box-shadow:var(--shadow-hover)}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(135deg,rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(45deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:74px 74px;opacity:.6}
+.hero::after{content:"";position:absolute;width:280px;height:280px;right:-90px;top:-110px;border-radius:50%;
+  background:radial-gradient(circle,rgba(40,211,255,.35),transparent 70%);animation:float 7s ease-in-out infinite;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-glow{position:absolute;inset:-40%;z-index:0;pointer-events:none;opacity:.5;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(120,190,255,.30),transparent 60%);transition:opacity .4s ease}
+@keyframes float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-14px,0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  font-size:12px;font-weight:800;letter-spacing:.1em}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:blink 1.8s ease-in-out infinite}
+.hero h1{margin:18px 0 14px;font-family:'M PLUS 1',sans-serif;font-size:clamp(27px,5.4vw,52px);line-height:1.28;font-weight:800;letter-spacing:-.01em}
+.hero h1 .grad{background:linear-gradient(135deg,#8fd6ff,#fff 60%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero .lead{margin:0;font-size:clamp(14px,2.2vw,17px);opacity:.94;max-width:44em}
+.hero-meta{margin-top:16px;font-size:13px;opacity:.8}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero-figure{margin-top:28px;border-radius:18px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 16px 40px rgba(0,0,0,.42)}
+.hero-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.hero-stat{flex:1 1 150px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16)}
+.hero-stat b{display:block;font-family:'M PLUS 1',sans-serif;font-size:clamp(20px,3.4vw,28px);line-height:1.3}
+.hero-stat span{font-size:12px;opacity:.82}
+
+/* ============ [C:ボタン] ============ */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:13px 24px;
+  overflow:hidden;border-radius:14px;background:var(--grad-accent);color:#fff!important;font-weight:900;text-decoration:none;
+  box-shadow:0 12px 30px rgba(8,102,255,.34);transition:transform .26s ease,box-shadow .26s ease}
+.btn::before{content:"";position:absolute;inset:0;transform:translateX(-130%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);transition:transform .6s ease}
+.btn:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(8,102,255,.46)}
+.btn:hover::before{transform:translateX(130%)}
+.btn.ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.4);box-shadow:none}
+.btn.solid{background:var(--navy);box-shadow:0 12px 30px rgba(11,42,91,.28)}
+.btn.small{min-height:40px;padding:9px 16px;font-size:13px;border-radius:11px;box-shadow:var(--shadow)}
+/* [C:ツールリンク] 本文中に置く小さめリンクボタン。章末に集約せず、話題が出た章の中に置く */
+.toollink{display:inline-flex;align-items:center;gap:7px;margin:4px 8px 4px 0;padding:8px 14px;border-radius:999px;
+  background:var(--white);border:1px solid var(--line);color:var(--blue)!important;font-size:13.5px;font-weight:800;
+  text-decoration:none;box-shadow:0 6px 16px rgba(8,32,80,.07);transition:transform .2s ease,border-color .2s ease}
+.toollink:hover{transform:translateY(-2px);border-color:var(--blue)}
+.toollink::after{content:"↗";font-size:11px;opacity:.7}
+
+/* ============ [C:目次] ============ */
+.toc{margin:30px 0 0;padding:24px 26px;border-radius:var(--radius);background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow)}
+.toc h2{margin:0 0 14px;font-family:'M PLUS 1',sans-serif;font-size:17px;color:var(--navy)}
+.toc ol{margin:0;padding-left:0;list-style:none;counter-reset:toc;display:grid;gap:6px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.toc li{counter-increment:toc}
+.toc a{display:flex;gap:10px;align-items:baseline;padding:8px 10px;border-radius:10px;color:var(--ink-soft)!important;
+  font-weight:700;font-size:14.5px;text-decoration:none;transition:background .2s ease,color .2s ease}
+.toc a::before{content:counter(toc,decimal-leading-zero);color:var(--blue);font-family:'M PLUS 1',sans-serif;font-size:13px}
+.toc a:hover,.toc a.active{background:var(--blue-soft);color:var(--navy)!important}
+
+/* [C:サイド進捗ナビ] PCのみ。現在地を点で示す */
+.sidenav{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:40;display:none;flex-direction:column;gap:11px}
+.sidenav a{position:relative;width:11px;height:11px;border-radius:50%;background:var(--line);transition:background .25s ease,transform .25s ease}
+.sidenav a.active{background:var(--blue);transform:scale(1.45)}
+.sidenav a span{position:absolute;right:20px;top:50%;transform:translateY(-50%) translateX(6px);white-space:nowrap;
+  padding:5px 10px;border-radius:8px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;
+  opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.sidenav a:hover span{opacity:1;transform:translateY(-50%) translateX(0)}
+@media (min-width:1240px){.sidenav{display:flex}}
+
+/* ============ [C:セクション見出し] ============ */
+.sec{margin-top:56px}
+.sec-label{margin:0;text-align:center;font-family:'M PLUS 1',sans-serif;font-size:12.5px;letter-spacing:.16em;color:var(--blue);font-weight:800}
+.sec-title{margin:6px 0 6px;text-align:center;font-family:'M PLUS 1',sans-serif;font-size:clamp(21px,4.4vw,31px);line-height:1.42;color:var(--navy);font-weight:800}
+.sec-lead{margin:0 auto;max-width:36em;text-align:center;font-size:14.5px;color:var(--muted)}
+
+/* ============ [C:本文カード] ============ */
+.card{margin-top:22px;padding:clamp(20px,3.4vw,32px);border-radius:var(--radius);background:var(--white);
+  border:1px solid var(--line);box-shadow:var(--shadow);transition:transform .3s ease,box-shadow .3s ease}
+.card:hover{box-shadow:var(--shadow-hover)}
+.card h3{margin:26px 0 10px;font-family:'M PLUS 1',sans-serif;font-size:clamp(17px,2.8vw,21px);color:var(--navy);line-height:1.5}
+.card h3:first-child{margin-top:0}
+.card p{margin:0 0 12px}
+.card p:last-child{margin-bottom:0}
+.hl{background:linear-gradient(transparent 62%,rgba(8,102,255,.22) 62%);font-weight:800}
+
+/* [C:3Dホバーカード] グリッド内の小カードだけ軽く反応させる */
+.tilt{transform-style:preserve-3d;transition:transform .3s ease}
+
+/* ============ [C:手順ステップ] 番号つき縦並び ============ */
+.step{display:flex;gap:16px;padding:20px 0;border-top:1px dashed var(--line)}
+.step:first-of-type{border-top:0;padding-top:4px}
+.step-no{flex:0 0 42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:12px;
+  background:var(--grad-accent);color:#fff;font-family:'M PLUS 1',sans-serif;font-weight:800;font-size:17px;
+  box-shadow:0 8px 20px rgba(8,102,255,.28)}
+.step-body{flex:1;min-width:0}
+.step-body h4{margin:6px 0 8px;font-family:'M PLUS 1',sans-serif;font-size:16.5px;color:var(--navy);line-height:1.55}
+.step-body p{margin:0 0 10px;font-size:15px}
+
+/* ============ [C:グリッドカード] 3つ並べる用 ============ */
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:6px}
+.grid-item{padding:20px;border-radius:var(--radius-sm);background:var(--blue-soft);border:1px solid var(--line)}
+.grid-item .tag{display:inline-block;margin-bottom:8px;padding:3px 11px;border-radius:999px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:800}
+.grid-item h4{margin:0 0 7px;font-family:'M PLUS 1',sans-serif;font-size:16px;color:var(--navy);line-height:1.5}
+.grid-item p{margin:0;font-size:14px;color:var(--ink-soft)}
+
+/* ============ [C:要点リスト] ============ */
+.takeaway{margin:0;padding:0;list-style:none;counter-reset:tk}
+.takeaway li{counter-increment:tk;position:relative;padding:14px 0 14px 46px;border-bottom:1px dashed var(--line)}
+.takeaway li:last-child{border-bottom:0}
+.takeaway li::before{content:counter(tk);position:absolute;left:0;top:14px;width:30px;height:30px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;background:var(--navy);color:#fff;font-size:14px;font-weight:800}
+.takeaway b{display:block;color:var(--navy);font-size:16px;line-height:1.6}
+.takeaway span{display:block;margin-top:5px;font-size:14.5px;color:var(--ink-soft)}
+
+/* [C:チェックリスト] */
+.check{margin:0;padding:0;list-style:none}
+.check li{position:relative;padding:9px 0 9px 32px;font-size:15px}
+.check li::before{content:"";position:absolute;left:4px;top:17px;width:14px;height:8px;border-left:3px solid var(--blue);border-bottom:3px solid var(--blue);transform:rotate(-45deg)}
+
+/* ============ [C:プロンプト枠] コピーボタン付き ============ */
+.prompt{position:relative;margin:18px 0;border-radius:var(--radius-sm);background:var(--code-bg);
+  box-shadow:0 16px 38px rgba(4,20,54,.32);overflow:hidden}
+.prompt-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;
+  background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.09)}
+.prompt-head b{color:#cfe4ff;font-size:12.5px;font-weight:800;letter-spacing:.04em}
+.copy{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:0;border-radius:9px;cursor:pointer;
+  background:var(--blue);color:#fff;font-size:12px;font-weight:800;font-family:inherit;transition:background .2s ease,transform .2s ease}
+.copy:hover{transform:translateY(-1px)}
+.copy.done{background:var(--ok)}
+.prompt pre{margin:0;padding:18px 18px 20px;overflow-x:auto;color:#e6f0ff;font-size:13.5px;line-height:1.85;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Noto Sans JP',monospace;white-space:pre-wrap;word-break:break-word}
+
+/* ============ [C:画像] 生成画像・スクショを本文に挟む ============ */
+.figure{margin:22px 0;border-radius:var(--radius-sm);overflow:hidden;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow)}
+.figure img{width:100%}
+.figure figcaption{padding:12px 16px;font-size:13px;color:var(--muted);background:var(--blue-soft);border-top:1px solid var(--line)}
+
+/* ============ [C:動画] 16:9で埋め込む ============ */
+.video{margin:20px 0 0;border-radius:var(--radius-sm);overflow:hidden;background:#050d1f;aspect-ratio:16/9;box-shadow:var(--shadow)}
+.video iframe,.video video{width:100%;height:100%;border:0;display:block}
+.video-note{margin:12px 0 0;font-size:13.5px;color:var(--muted)}
+
+/* ============ [C:表] 横スクロール対応 ============ */
+.table-scroll{margin:18px 0;overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--navy);color:#fff;font-weight:800;white-space:nowrap}
+tbody tr:nth-child(even){background:var(--blue-soft)}
+tbody tr:last-child td{border-bottom:0}
+
+/* ============ [C:補足ボックス] ============ */
+.note{margin:16px 0;padding:14px 18px;border-radius:var(--radius-sm);background:var(--blue-soft);border-left:4px solid var(--blue);font-size:14px;color:var(--ink-soft)}
+.note.warn{background:#fff8ec;border-left-color:var(--warn)}
+.note b{color:var(--navy)}
+.example{margin:12px 0;padding:14px 18px;border-radius:var(--radius-sm);background:#f4f8ff;border:1px dashed var(--blue);font-size:14px}
+
+/* ============ [C:締めCTA] ============ */
+.closing{margin-top:64px;padding:clamp(30px,5vw,52px);border-radius:26px;color:#fff;text-align:center;
+  background:var(--grad-hero);box-shadow:var(--shadow-hover);position:relative;overflow:hidden}
+.closing::after{content:"";position:absolute;width:340px;height:340px;left:-120px;bottom:-160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(40,211,255,.28),transparent 70%);animation:float 8s ease-in-out infinite}
+.closing-inner{position:relative;z-index:1}
+.closing h2{margin:0 0 12px;font-family:'M PLUS 1',sans-serif;font-size:clamp(20px,4vw,30px);line-height:1.45}
+.closing p{margin:0 auto 10px;max-width:38em;font-size:15px;opacity:.94}
+.closing .btn{margin-top:20px}
+.bonus{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin:24px 0 4px;text-align:left}
+.bonus div{padding:14px 16px;border-radius:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18)}
+.bonus b{display:block;font-family:'M PLUS 1',sans-serif;font-size:19px}
+.bonus span{font-size:12.5px;opacity:.85}
+
+.foot{margin-top:34px;text-align:center;font-size:12.5px;color:var(--muted)}
+
+/* [C:トップへ戻る] */
+.totop{position:fixed;right:20px;bottom:22px;z-index:50;width:48px;height:48px;border:0;border-radius:50%;cursor:pointer;
+  background:var(--navy);color:#fff;font-size:19px;box-shadow:var(--shadow);opacity:0;pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease}
+.totop.show{opacity:1;pointer-events:auto}
+.totop:hover{transform:translateY(-3px)}
+
+/* ============ [C:出現アニメーション] ============ */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:640px){
+  body{font-size:15.5px;line-height:1.9}
+  .step{gap:12px}
+  .step-no{flex-basis:36px;height:36px;font-size:15px}
+  .totop{right:14px;bottom:14px;width:44px;height:44px}
+}
+
+/* 動きが苦手な閲覧者には動きを止める */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- [C:進捗バー] -->
+<div class="progress"><span id="bar"></span></div>
+
+<!-- [C:サイド進捗ナビ] -->
+<nav class="sidenav" id="sidenav" aria-label="セクション">
+  <a href="#s0"><span>全体像</span></a>
+  <a href="#s1"><span>STEP1 AIに慣れる</span></a>
+  <a href="#s2"><span>STEP2 ツール理解</span></a>
+  <a href="#s3"><span>STEP3 環境構築</span></a>
+  <a href="#s4"><span>STEP4 ツールを繋ぐ</span></a>
+  <a href="#s5"><span>STEP5 スキル構築</span></a>
+  <a href="#s6"><span>STEP6 定期自動実行</span></a>
+  <a href="#s7"><span>STEP7 自律思考</span></a>
+  <a href="#s8"><span>まとめ</span></a>
+</nav>
+
+<div class="page">
+
+  <!-- ============ [C:ヒーロー] ============ -->
+  <header class="hero" id="hero">
+    <div class="hero-glow" id="glow"></div>
+    <div class="hero-inner">
+      <span class="badge"><span class="dot"></span>保存版資料｜7STEPロードマップ</span>
+      <h1>AIで仕事を自動化するまでの<br><span class="grad">7STEPロードマップ</span></h1>
+      <p class="lead">保存版資料のお受け取り、ありがとうございます。この資料では、7STEPの要点と、実際に手を動かすための手順をまとめています。この資料に出てくるプロンプト（AIへの指示文）は、すべてコピーボタン付きで置いてあります。</p>
+
+      <div class="hero-stats">
+        <div class="hero-stat"><b>7 STEP</b><span>AIに慣れる → 自律思考まで、この順番で進む</span></div>
+        <div class="hero-stat"><b>9本</b><span>コピペ用プロンプト（フォルダ構造の一撃構築プロンプト付き）＋実物フォルダの見本1つ</span></div>
+        <div class="hero-stat"><b>2つ</b><span>今日やること：Claude Code か Codex を入れる／AI専用フォルダを1個作る</span></div>
+      </div>
+
+      <div class="hero-cta">
+        <a class="btn" href="#s0">資料を読みはじめる →</a>
+      </div>
+
+      <p class="hero-meta">※ このページはブックマークして、作業しながら見返してください。</p>
+    </div>
+  </header>
+
+  <!-- ============ [C:目次] ============ -->
+  <nav class="toc rv">
+    <h2>この資料の中身</h2>
+    <ol>
+      <li><a href="#s0">7STEPの全体像と、この資料の使い方</a></li>
+      <li><a href="#s1">STEP1 AIに慣れる</a></li>
+      <li><a href="#s2">STEP2 ツール理解（便利ツールの使い分け）</a></li>
+      <li><a href="#s3">STEP3 環境構築（フォルダ作成 → 中の分け方 → 情報を入れる）</a></li>
+      <li><a href="#s4">STEP4 ツールを繋ぐ（API・MCP と、僕がよく使う5つ）</a></li>
+      <li><a href="#s5">STEP5 スキル構築（競合Xリサーチを1個のスキルにする）</a></li>
+      <li><a href="#s6">STEP6 定期自動実行（スキルを毎朝勝手に動かす）</a></li>
+      <li><a href="#s7">STEP7 自律思考（名前だけ知っておく）</a></li>
+      <li><a href="#s8">まとめ：7STEPチェックリスト</a></li>
+    </ol>
+  </nav>
+
+  <!-- ============ 全体像 ============ -->
+  <section class="sec" id="s0">
+    <p class="sec-label rv">OVERVIEW</p>
+    <h2 class="sec-title rv">7STEPの全体像と、この資料の使い方</h2>
+    <p class="sec-lead rv">AIで仕事を自動化するまでにやることは、分解するとこの7つだけです。</p>
+
+    <div class="card rv">
+      <p>AI活用が続かない人は、だいたい同じ流れです。新しいツールを試す。すごいってなる。でも翌週には使ってない。仕事は何も変わってない。この7STEPは、それを防ぐための順番です。<span class="hl">やること自体は、1個ずつ見るとめっちゃ簡単</span>なので、上から順に進めてください。</p>
+
+      <div class="grid">
+        <div class="grid-item tilt"><span class="tag">STEP 1</span><h4>AIに慣れる</h4><p>ウェブのAIと話して、得意・不得意を肌感でつかむ。慣れたら Claude Code か Codex へ。</p></div>
+        <div class="grid-item tilt"><span class="tag">STEP 2</span><h4>ツール理解</h4><p>AI本体のまわりの便利ツールを先に知っておく。ここはガンガン課金しなくていい。</p></div>
+        <div class="grid-item tilt"><span class="tag">STEP 3</span><h4>環境構築</h4><p>AI専用のフォルダを作り、中を分けて、情報（ナレッジ）を入れる。AIの出力の差は、情報を渡せているかで決まります。</p></div>
+        <div class="grid-item tilt"><span class="tag">STEP 4</span><h4>ツールを繋ぐ</h4><p>API・MCP（外のサービスとAIをつなぐ窓口。STEP4で説明します）で、カレンダー・SNS・会計などパソコンの外の仕事も任せる。</p></div>
+        <div class="grid-item tilt"><span class="tag">STEP 5</span><h4>スキル構築</h4><p>一度やった作業を「仕事マニュアル」にして、一言で何回でも再現する。</p></div>
+        <div class="grid-item tilt"><span class="tag">STEP 6</span><h4>定期自動実行</h4><p>完璧になったスキルを、決めた時間に自動で動かす。</p></div>
+        <div class="grid-item tilt"><span class="tag">STEP 7</span><h4>自律思考</h4><p>AI同士が会話して自律的に動く世界。今は名前を知っておくだけでOK。</p></div>
+      </div>
+
+      <h3>この資料の使い方</h3>
+      <ul class="takeaway">
+        <li><b>全部を一気にやらなくて大丈夫です</b><span>自分がどこまでできているかを確認しながら、上から順に進めてください。</span></li>
+        <li><b>今日やることは、STEP3の最初の2つだけ</b><span>Claude Code か Codex を入れる／AI専用フォルダを1個作る。この2つが終われば、あとは順番に足していけます。</span></li>
+        <li><b>プロンプトは、そのままコピーして貼ってください</b><span>僕が実際に使っているものと、この資料用に用意したものを置いています。「コピー」ボタンで一発です。</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ STEP1 ============ -->
+  <section class="sec" id="s1">
+    <p class="sec-label rv">STEP 01</p>
+    <h2 class="sec-title rv">AIに慣れる</h2>
+    <p class="sec-lead rv">これから仕事を渡していく相手が、何が得意で何が苦手か。まずはそこからです。</p>
+
+    <div class="card rv">
+      <p>これから仕事を渡していく相手が何が得意で何が苦手かわからないと、任せられません。だからまずは、<span class="hl">ウェブでAIと話すところから</span>です。</p>
+
+      <h3>手順</h3>
+      <div class="step">
+        <div class="step-no">1</div>
+        <div class="step-body">
+          <h4>ChatGPT・Gemini・Claude、どれでもいいのでウェブで話す</h4>
+          <p>仕事の相談でも雑談でもいいので、とりあえず何でも投げてみてください。そうすると、AIの得意・不得意が肌感でわかってきます。無料でも触れます。</p>
+          <a class="toollink" href="https://claude.ai/" target="_blank" rel="noopener">Claude</a>
+          <a class="toollink" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
+          <a class="toollink" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">2</div>
+        <div class="step-body">
+          <h4>慣れたら、Claude Code か Codex を触る</h4>
+          <p>ウェブのAIは会話までですけど、Claude Code（パソコン上でAIに作業させるための道具）と Codex（OpenAIが提供する、パソコン上でAIに作業させるための道具）は、<span class="hl">パソコン上で作業までしてくれるAI</span>です。ここから先の自動化は、全部これでやっていきます。</p>
+          <a class="toollink" href="https://claude.com/download" target="_blank" rel="noopener">Claude Code（デスクトップアプリ）ダウンロード</a>
+          <a class="toollink" href="https://code.claude.com/docs/ja/quickstart" target="_blank" rel="noopener">Claude Code クイックスタート</a>
+          <a class="toollink" href="https://openai.com/codex/" target="_blank" rel="noopener">Codex 公式</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">3</div>
+        <div class="step-body">
+          <h4>自動化までいくなら、どちらかに課金する</h4>
+          <p>ChatGPT・Claude・Gemini は無料でも触れますが、Claude Code は有料プランが必要です。Codex は無料プランでも上限付きで触れますが、自動化まで使うなら有料が現実的です。自動化までいくなら必要なので、課金しちゃいましょう。<span class="hl">飲み会1回我慢すれば、東大以上の脳みそを24時間使えるようになる</span>ので、ここはケチらずいきましょう。</p>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>課金するもの</th><th>使えるようになるもの</th><th>公式</th></tr></thead>
+              <tbody>
+                <tr><td>Claude の有料プラン（Pro 以上）</td><td>Claude Code</td><td><a href="https://claude.com/pricing" target="_blank" rel="noopener">料金を見る</a></td></tr>
+                <tr><td>ChatGPT の有料プラン（Plus 以上）</td><td>Codex（無料プランでも上限付きで触れますが、自動化まで使うなら有料で上限を広げるのが現実的です）</td><td><a href="https://openai.com/codex/" target="_blank" rel="noopener">公式を見る</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:13px;color:var(--muted)">※ 2026年8月時点で、入口の有料プランは月3,000円前後（Claude Pro 月払い $20／ChatGPT Plus 月額 ¥3,000）です。料金・プラン名は変わることがあるので、契約前に各公式ページで確認してください。</p>
+        </div>
+      </div>
+
+      <div class="note"><b>ポイント：</b>普段からAIを触っている人は、STEP1はクリア済みです。次のSTEP2へ進んでください。</div>
+    </div>
+  </section>
+
+  <!-- ============ STEP2 ============ -->
+  <section class="sec" id="s2">
+    <p class="sec-label rv">STEP 02</p>
+    <h2 class="sec-title rv">ツール理解（便利ツールの使い分け）</h2>
+    <p class="sec-lead rv">基本は Claude Code か Codex があれば大体の業務はできます。まわりの便利ツールを先に知っておくと、生産性がめちゃくちゃ上がります。</p>
+
+    <div class="card rv">
+      <p>まわりの便利ツールの細かい使い分けを、ここにまとめています。<span class="hl">ここはガンガン課金しなくていい</span>ので、触りながら知っていけば大丈夫です。</p>
+
+      <h3>便利ツールの使い分け</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>ツール</th><th>何をする道具か</th><th>こんな時に</th><th>注意</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Typeless</b><br><a class="toollink" href="https://www.typeless.com/" target="_blank" rel="noopener">公式</a></td>
+              <td>音声入力ツール。パソコンに向かって喋った内容が、そのまま整理された文章になる（AIモデルが内蔵されているので誤字脱字が出にくい）</td>
+              <td>AIへの指示出し。タイピングより速く、長い前提や背景をまとめてAIに渡したい時。僕はもう音声入力はこれしか使っていません</td>
+              <td>録音ファイルの文字起こしはできません（あくまで音声入力）。有料プランあり</td>
+            </tr>
+            <tr>
+              <td><b>NotebookLM</b><br><a class="toollink" href="https://notebooklm.google.com/" target="_blank" rel="noopener">公式</a></td>
+              <td>資料を読ませて質問できるAI。入れた資料の範囲だけで答える</td>
+              <td>PDFや長い資料を読み込ませて、中身を質問しながら把握したい時</td>
+              <td>Googleアカウントで無料から使える。入れた資料はNotebookLMの中でしか使えないので、資産として残す情報は、STEP3で作る自分のパソコンの中のフォルダ（これを「ローカル」と呼びます）に置く</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note"><b>ポイント：</b>道具を増やすことが目的ではありません。Claude Code か Codex を軸にして、「これがあると速くなる」と感じたものだけ足していけばOKです。</div>
+    </div>
+  </section>
+
+  <!-- ============ STEP3 ============ -->
+  <section class="sec" id="s3">
+    <p class="sec-label rv">STEP 03</p>
+    <h2 class="sec-title rv">環境構築（フォルダ作成 → 中の分け方 → 情報を入れる）</h2>
+    <p class="sec-lead rv">Claude Code や Codex はパソコンの中の「フォルダ」で作業します。AIが正しく動ける場所を作りましょう。</p>
+
+    <div class="card rv">
+      <h3>先に2分半で、流れを掴む</h3>
+      <div class="video">
+        <video src="assets/step3-guide.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <p class="video-note">▶ STEP3の3つの作業（フォルダを作る → 中を分ける → 情報を入れる）を約2分半で通しで解説しています。見てから下を順番にやると迷いません。</p>
+      <details class="note"><summary>ナレーション全文を読む</summary>
+        <p>STEP3、環境構築を、はじめから通しで解説します。やることは、フォルダを作る、中を分ける、情報を入れる、の3つだけです。1つずつ、そのまま真似してください。</p>
+        <p>そもそも、Claude CodeやCodexは、パソコンの中の「フォルダ」で作業するAIです。だから最初に、AIが正しく動けるように、AI専用の場所を用意してあげる必要があります。</p>
+        <p>最初にやることは2つです。1つ目は、Claude CodeかCodexを入れること。公式サイトからダウンロードして、指示どおりに進めるだけです。2つ目は、パソコンにAI専用のフォルダを1個作ること。名前は自由で、例えば「AI経営」でOKです。</p>
+        <p>実は、フォルダを作るのすら、AIに任せられます。Claude CodeやCodexは、パソコンのフォルダを直接触れるからです。アプリを開いて、こう指示してみてください。もちろん、自分で作ってもOKです。</p>
+        <p>次に、中の分け方です。AIの良い出力は、指示の質と、渡す情報の質の、掛け算で決まります。料理に例えると、指示は調理器具、情報は食材です。みんな指示は頑張るのに、情報の整理ができていない。だから、情報の置き場所を先に整えます。</p>
+        <p>フォルダ構造は、資料に置いてある「一撃で構築するプロンプト」を貼るだけで作れます。AIがあなたの仕事内容を質問しながら、事業部ごとのフォルダを作ってくれます。僕の環境だと、SNS事業部の中にYouTubeがあって、その中がリサーチ、企画、台本、サムネイル、撮影、編集、公開、分析と、仕事の順に並んでいます。</p>
+        <p>最後に、情報を入れます。メモを放り込むのも面倒だと思うので、ここもAIに任せましょう。情報を渡して、こう頼むだけです。ChatGPTのプロジェクトやNotebookLMに入れると、そのAIの中でしか使えません。自分のパソコン、つまりローカルに置けば、ClaudeでもCodexでも、どのAIからでも同じ資産が使えます。</p>
+        <p>ここまで来ると、AIの答えがあなた専用になってきます。今日は、フォルダを1個作るところまでで十分です。完璧を目指さなくて大丈夫。作れたら、次はSTEP4、ツールを繋ぐ、に進みましょう。</p>
+      </details>
+
+      <h3>3-1. 最初にやること（2つ）</h3>
+      <div class="step">
+        <div class="step-no">1</div>
+        <div class="step-body">
+          <h4>Claude Code か Codex を入れる</h4>
+          <p>公式サイトからダウンロードして、指示どおりに進めるだけです。STEP1で入れた人はもう終わっています。</p>
+          <a class="toollink" href="https://claude.com/download" target="_blank" rel="noopener">Claude Code（デスクトップアプリ）ダウンロード</a>
+          <a class="toollink" href="https://openai.com/codex/" target="_blank" rel="noopener">Codex 公式</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">2</div>
+        <div class="step-body">
+          <h4>パソコンに、AI専用のフォルダを1個作る</h4>
+          <p>名前は自由です。例えば「AI経営」フォルダとかで。実は<span class="hl">作るのすらAIに任せられます</span>。Claude Code と Codex はパソコンのフォルダを直接触れるので、アプリを開いてこう指示してみてください。もちろん、普通に自分で作ってもOKです。</p>
+          <p>アプリを起動した時に「作業するフォルダを選ぶ」画面が出たら、置きたい場所（デスクトップや書類フォルダなど）をいったん選んでください。その中にAI経営フォルダが作られます。</p>
+        </div>
+      </div>
+
+      <div class="prompt">
+        <div class="prompt-head">
+          <b>AI専用フォルダを作らせるプロンプト</b>
+          <button class="copy" type="button">コピー</button>
+        </div>
+        <pre>AI経営という名前でフォルダを作ってください</pre>
+      </div>
+
+      <div class="note"><b>ポイント：</b>この時点では、中に情報を入れなくて大丈夫です。まずフォルダを1個作る。中身は、この章の最後で入れます。<br><b>作れたら、次からは Claude Code / Codex でその AI経営フォルダを開き直して作業してください</b>（新しいチャットを始めて、フォルダを選ぶ画面で今作った AI経営 を選ぶだけです）。この先のプロンプト（フォルダ構造・ナレッジ追加・.env）は、全部このフォルダを開いた状態で送ります。</div>
+    </div>
+
+    <div class="card rv">
+      <h3>3-2. 中の分け方（フォルダ構造）</h3>
+      <p>いきなりですが、AIの答えがイマイチな時って、何が原因だと思いますか？　指示出し、と思った方が多いはずです。これは違って、<span class="hl">AIの回答がイマイチになる時は、僕たちが渡す情報がイマイチな時</span>なんです。</p>
+      <p>そもそもAIの良い出力は、2つの要素の掛け算で出ます。1つ目がAIへの指示出しの質、つまりプロンプト。2つ目がAIに与える情報の質、ナレッジとか呼ばれます。料理に例えると、どれだけ良い調理器具を持っていても、使っている食材が賞味期限切れだったら、良い料理はできないじゃないですか。<b>調理器具がプロンプト、食材がナレッジ</b>です。</p>
+
+      <p>情報をごちゃごちゃに渡してしまうと、AIが「情報はありがたいけど、どこを見ればいいの！？」と混乱してしまいます。なので情報を整理するために、フォルダの構造、つまり<span class="hl">情報の置き場所を整理する</span>必要があります。具体的には、まず事業部ごとのフォルダを作ります。</p>
+
+      <h3>フォルダ構造を一撃で構築するプロンプト</h3>
+      <p>フォルダ構造を一撃で作るプロンプトです。<b>3-1で作ったAI専用フォルダ（例：AI経営）を Claude Code か Codex で開いた状態で</b>貼ると、あなたの仕事内容をヒアリングした上で、AIが働きやすいフォルダ一式をその中に作ってくれます。</p>
+
+      <div class="prompt">
+        <div class="prompt-head">
+          <b>フォルダ構造 一撃構築プロンプト</b>
+          <button class="copy" type="button">コピー</button>
+        </div>
+        <pre>あなたに、私の仕事用フォルダの設計をお願いします。
+これから、このフォルダをあなた（Claude Code / Codex）の作業場所として使います。
+
+【やってほしいこと】
+1. まず、次のことを私に1つずつ質問してください。
+   - どんな事業・仕事をしているか（複数あれば全部）
+   - よくやる作業（例: SNS投稿づくり、資料作成、経理、リサーチ）
+   - すでに持っている情報・ファイルの種類（例: 過去の投稿、商品資料、お客様とのやり取り）
+2. 私の回答をもとに、事業や部署ごとにフォルダを分けた構成を設計してください。
+   各事業部の中は、その仕事の流れの順（例: リサーチ → 企画 → 制作 → 公開 → 分析）で並べてください。
+3. 何度も使い回す情報は、事業部とは別に「ナレッジ」フォルダにまとめ、次の3種類に分けてください。
+   - パーソナルナレッジ: 私自身の考え方・経歴・文体など「私の情報」
+   - プロダクトナレッジ: 商品・サービス・お客様に関する情報
+   - コンテンツナレッジ: 過去の発信物・制作物・参考資料
+4. それぞれのフォルダに「何を入れるフォルダか」を書いたREADME.md（説明書きファイル）を作ってください。
+5. 最後に、今後あなたが成果物を保存する時の「保存先の判断ルール」を1枚のファイル（directory.md）にまとめてください。
+
+【条件】
+- フォルダ名は、ITに詳しくない人でも意味が分かる日本語にすること
+- 階層を深くしすぎないこと（「事業部」「ナレッジ」のまとめフォルダの下は、事業部名 › 媒体 › 工程 の3段まで）
+- 分からないことは推測せず、私に質問すること</pre>
+      </div>
+
+      <h3>僕の実物のフォルダはこうなっています</h3>
+      <p>僕が実際に使っている環境です。事業部・ナレッジなどいろいろありますが、文書ファイルだけで約9.8万、容量にして201GBが、この形で整理されています。例えばSNS事業部を開くとYouTubeのフォルダがあって、中は<b>仕事の順</b>に並んでいます。</p>
+      <div class="prompt">
+        <div class="prompt-head">
+          <b>実物の見本：SNS事業部 › YouTube の中身（仕事の順に並んでいる。これは見本で、AIに貼るものではありません）</b>
+          <button class="copy" type="button">コピー</button>
+        </div>
+        <pre>📁 AI経営
+├── 📁 事業部
+│   ├── 📁 SNS事業部
+│   │   └── 📁 YouTube
+│   │       ├── 📁 リサーチ
+│   │       ├── 📁 企画
+│   │       ├── 📁 台本
+│   │       ├── 📁 サムネイル
+│   │       ├── 📁 撮影
+│   │       ├── 📁 編集
+│   │       ├── 📁 公開
+│   │       └── 📁 分析
+│   ├── 📁 プロダクト事業部
+│   ├── 📁 セールス
+│   └── 📁 経理
+└── 📁 ナレッジ
+    ├── 📁 パーソナルナレッジ
+    ├── 📁 プロダクトナレッジ
+    └── 📁 コンテンツナレッジ</pre>
+      </div>
+      <div class="note"><b>ポイント：</b>上のプロンプトを使えば、この形を一撃で再現できます。最初からきれいに整理しなくて大丈夫。まず箱を作って、使いながら育ててください。</div>
+    </div>
+
+    <div class="card rv">
+      <h3>3-3. 情報（ナレッジ）を入れる</h3>
+      <p>仕上げに、作ったフォルダの中に必要な情報、つまりナレッジを入れていきます。置き場所が決まったら、次は中身ってことですね。</p>
+      <p>そもそも、AIの答えが一般論で使えないのって、AIが悪いんじゃなくて、<span class="hl">あなたの情報を何も知らないから</span>なんですよ。僕がよく言っているのは <b>KNOWLEDGE IS KING</b>。AIの出力の差はプロンプトやセンスじゃなくて、情報を渡せているかどうかで決まります。入れる前は誰にでも書ける一般論が出てきて、入れた後はあなたの言葉で返ってきます。</p>
+
+      <h3>何を入れるか（やりたい仕事で変わります）</h3>
+      <div class="grid">
+        <div class="grid-item tilt"><span class="tag">SNSで発信したい</span><h4>自分の過去の情報</h4><p>過去の投稿・記事・台本・プロフィール。あなたの言葉と考え方をAIに知らせます。</p></div>
+        <div class="grid-item tilt"><span class="tag">商品を売っていきたい</span><h4>商品の情報</h4><p>商品説明・料金・特典・よくある質問・お客様の声。</p></div>
+        <div class="grid-item tilt"><span class="tag">どの仕事でも</span><h4>ターゲット顧客の情報</h4><p>誰に届けるのか。悩み・言葉づかい・アンケートやヒアリングの記録。</p></div>
+      </div>
+
+      <h3>入れ方：メモを放り込むのもAIに任せる</h3>
+      <p>メモを放り込むのすら面倒だと思うので、ここはAIに情報を渡して、適切なフォルダの中に入れてもらいましょう。渡し方は3つのどれでもOKです。①過去の投稿や商品説明の文章をチャット欄に貼り付ける ②ファイル（PDF・Word・メモ）をチャット欄にドラッグして添付する ③AI経営フォルダの中にファイルを入れておく。そのあとで、こう頼みます（③の場合は文頭に「さっき入れたファイルを」を足してください）。</p>
+      <div class="prompt">
+        <div class="prompt-head">
+          <b>情報をナレッジとしてフォルダに入れさせるプロンプト（情報を渡した後に送る）</b>
+          <button class="copy" type="button">コピー</button>
+        </div>
+        <pre>与えた情報を適切なフォルダにナレッジとして追加して！</pre>
+      </div>
+      <p>これだけでOKです。そうするとAIが材料を読んで、ナレッジの形にまとめてくれます。</p>
+
+      <div class="note warn"><b>ChatGPTのプロジェクト機能に入れるんじゃダメ？</b>　ChatGPTのプロジェクトに入れた資産は、ChatGPTの中でしか使えません。NotebookLMも同じで、NotebookLM経由でしか使えなくなります。危険とかじゃなくて、マジでもったいないんです。自分のパソコン、つまりローカルに置けば、ClaudeでもCodexでも、どのAIからでも同じ資産が使えます。だから初心者も上級者も関係なく、<b>ローカルにデータを溜め続けてください</b>。</div>
+
+      <h3>STEP3 チェックリスト</h3>
+      <ul class="check">
+        <li>Claude Code か Codex が入っている</li>
+        <li>AI専用のフォルダが1個ある（名前は自由）</li>
+        <li>一撃構築プロンプトで、事業部ごと・ナレッジのフォルダができている</li>
+        <li>手元の情報を1つ、AIに渡してフォルダに入れてもらった</li>
+      </ul>
+      <p>ここまで来ると、AIの答えがあなた専用になってきます。</p>
+    </div>
+  </section>
+
+  <!-- ============ STEP4 ============ -->
+  <section class="sec" id="s4">
+    <p class="sec-label rv">STEP 04</p>
+    <h2 class="sec-title rv">ツールを繋ぐ（API・MCP と、僕がよく使う5つ）</h2>
+    <p class="sec-lead rv">ここまでだと、AIはパソコンの中でしか働けません。カレンダーやメールやSNSにある仕事も、繋いで任せられるようにします。</p>
+
+    <div class="card rv">
+      <h3>先に言葉だけ</h3>
+      <p><b>API</b>（外部のサービスとAIをつなぐ窓口みたいなもの。使うには「鍵」＝APIキーが要ります）と、<b>MCP</b>（APIの仲間で、AIと外部ツールを連携する仕組み）。やること自体は「繋ぐだけ」です。</p>
+
+      <h3>繋ぎ方（3ステップ）</h3>
+      <div class="step">
+        <div class="step-no">1</div>
+        <div class="step-body">
+          <h4>「サービス名 API」で検索して、専用サイトへ行く</h4>
+          <p>APIやMCPはツールごとに入手方法が違いますが、基本的には「サービス名 API」とネットで調べれば専用サイトに行けます。そこでAPIキー（その鍵。人に見せてはいけない。パスワードと同じ扱いにする）を発行します。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">2</div>
+        <div class="step-body">
+          <h4>鍵は「.env」という設定ファイルにしまう（チャットに直接貼らない）</h4>
+          <p>APIキーは、銀行口座の暗証番号のようなものです。絶対に他人に見せてはいけませんし、AIのチャット欄にそのまま貼るのもダメです（会話の中に残って、流出する懸念があります）。代わりに <b>.env</b> という設定ファイルに入れて、AIにはそのファイルを読ませます。ファイルを作るところからAIに頼めます。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">3</div>
+        <div class="step-body">
+          <h4>実際に繋ぐのは、使いたいツールが出てきた時でOK</h4>
+          <p>いきなり全部繋がなくて大丈夫です。仕事の中で「これAIにやらせたい」が出てきた時に、そのツールだけ繋いでください。</p>
+        </div>
+      </div>
+
+      <div class="prompt">
+        <div class="prompt-head">
+          <b>APIキーを .env に入れさせるプロンプト（鍵そのものは書かない）</b>
+          <button class="copy" type="button">コピー</button>
+        </div>
+        <pre>APIキーを発行したから、.envファイルに入れたい。</pre>
+      </div>
+      <div class="note"><b>ポイント：</b>こう頼むと、AIが .env ファイルを作って「ここにキーを貼ってください」という行（例：X_API_KEY=）を用意してくれるので、= の右側にキーを貼って保存してください。.env は名前がドットで始まる隠しファイルで、Finder（Macでファイルを見る画面。Windowsならエクスプローラー）には見えないことがあります。貼る場所が分からなければ「.env を開いて」とAIに頼めば開いてくれます。貼り終えたら「入れました」と伝えれば読み取ってくれます。鍵の値そのものをチャットに打ち込まないのがコツです。</div>
+      <div class="prompt">
+        <div class="prompt-head">
+          <b>鍵の発行や設定で詰まったら、これをAIに送る（サービス名は自分のものに）</b>
+          <button class="copy" type="button">コピー</button>
+        </div>
+        <pre>Google カレンダーとスプレッドシート（または X API）を Claude Code / Codex から使えるようにしたい。
+必要な登録・設定を、僕がやる操作だけ1つずつ順番に教えて。
+鍵はチャットに貼らずに .env に入れる前提でお願いします。</pre>
+      </div>
+    </div>
+
+    <div class="card rv">
+      <h3>僕が特によく使っている5つ</h3>
+      <p>繋ぐと何ができるか。僕の環境で特に使っているものを5個だけ紹介します。</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>ツール</th><th>何ができる・どう便利か</th><th>公式</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><b>Google の API</b><br>（カレンダー・スプレッドシート・ドキュメント・Drive・Gmail）</td>
+              <td>カレンダーやスプレッドシートを、AIが直接読み書きできます。毎回資料を渡す作業が消えるので、<b>迷ったらまずここから</b>です。</td>
+              <td><a href="https://developers.google.com/workspace/sheets/api/reference/rest" target="_blank" rel="noopener">Sheets</a> / <a href="https://developers.google.com/workspace/calendar/api/guides/overview" target="_blank" rel="noopener">Calendar</a> / <a href="https://developers.google.com/workspace/drive/api/guides/about-sdk" target="_blank" rel="noopener">Drive</a> / <a href="https://developers.google.com/workspace/gmail/api/guides" target="_blank" rel="noopener">Gmail</a></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><b>X API</b></td>
+              <td>投稿の取得や検索ができます。SNSリサーチの元データはここから取っています（STEP5の競合リサーチで使います）。</td>
+              <td><a href="https://developer.x.com/" target="_blank" rel="noopener">X Developer Platform</a></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><b>freee</b>（会計ソフト）</td>
+              <td>経理の記帳をAIに任せられるので、<b>月末に領収書の山に追われなくなります</b>。</td>
+              <td><a href="https://developer.freee.co.jp/" target="_blank" rel="noopener">freee Developers</a></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><b>UTAGE</b><br>（会員サイトや配信をまとめて動かしているシステム）</td>
+              <td>僕が使っている配信システムです。最近、会員サイトまでAPIでいじれるようになって、<b>ページの入稿（サイトに載せる作業）が一撃で終わります</b>。</td>
+              <td><a href="https://help.utage-system.com/archives/25648" target="_blank" rel="noopener">UTAGE API・MCP</a></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><b>Grok</b>（xAI のAI。文字起こしが得意）</td>
+              <td>文字起こしの精度がめちゃめちゃ良くて、僕は <b>Plaud</b>（AIレコーダー）で録音したものを全部Grokでテキスト化しています。会議の録音を全部ローカルに落として保管しているので、「クライアントとの会議で7月26日の10時48分に『AI社員』って言ってましたよね」まで特定できます。言った言わない問題が消えます。</td>
+              <td><a href="https://docs.x.ai/developers/introduction" target="_blank" rel="noopener">xAI（Grok）API</a> / <a href="https://www.plaud.ai/" target="_blank" rel="noopener">Plaud</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;color:var(--muted)">※ 2026年8月時点の情報です。各サービスのAPIでできることは変わるので、利用前に公式ページで確認してください。Google のAPIは鍵だけでなく認証（許可）の設定が要ります。X API は前払いの従量課金で無料ではないので、料金を公式で確認してから使ってください。</p>
+
+      <div class="note"><b>ポイント：</b>UTAGEみたいに、APIまわりはリアルタイムで進化しています。「今、何ができるか」は公式ドキュメントで見てください。ここまで繋がったら、次はいよいよスキルです。</div>
+    </div>
+  </section>
+
+  <!-- ============ STEP5 ============ -->
+  <section class="sec" id="s5">
+    <p class="sec-label rv">STEP 05</p>
+    <h2 class="sec-title rv">スキル構築（競合Xリサーチを1個のスキルにする）</h2>
+    <p class="sec-lead rv">同じ指示を毎回打っていたら、それは自動化じゃないですよね。なのでスキルにします。</p>
+
+    <div class="card rv">
+      <p>環境とツールが揃うと、AIに頼めば大体の仕事はできるようになります。ただ、同じ指示を毎回打っていたら、それは自動化じゃない。なので<b>スキル</b>にします。スキルというのは、<span class="hl">AIに渡す仕事マニュアルのようなもの</span>で、一言指示するだけで、同じ仕事が何回でも再現されます。僕はよく「必殺コマンド」って呼んでいます。</p>
+
+      <h3>例：競合のX投稿リサーチを、1個のスキルにする</h3>
+      <p>参考にしている競合のX投稿を引っ張ってきて、伸びている投稿を分析して、分析内容をGoogleドキュメントに入れる。X と AI と Googleドキュメントで、ツールを3つ跨いでいますよね。<span class="hl">でもAPIを繋いであるから、これが1個のスキルで完結する</span>んです。</p>
+
+      <h3>手順</h3>
+      <div class="step">
+        <div class="step-no">1</div>
+        <div class="step-body">
+          <h4>まず一度、チャットで普通にやってもらう</h4>
+          <p>STEP4で X API と Google の API を繋いだ状態（AIに頼んで、実際に投稿やドキュメントが読み書きできる状態）で、下のプロンプトを貼ります。アカウント名は自分の競合に書き換えてください。やり取りしながら、理想の成果物になるまで仕上げます。</p>
+          <div class="prompt">
+            <div class="prompt-head">
+              <b>競合Xリサーチを一度やらせるプロンプト（資料用の例。＠のアカウント名は自分の競合に書き換える）</b>
+              <button class="copy" type="button">コピー</button>
+            </div>
+            <pre>参考にしている競合アカウント（@ここに競合のアカウント名）の直近の投稿を X API で取得して、
+伸びている投稿（いいね・保存・リポストが多いもの）の共通点を分析してください。
+・どんな型（書き出し・構成・長さ）が伸びているか
+・どんなテーマが伸びているか
+・自分の発信に取り入れるならどうするか
+この3点にまとめて、結果を Googleドキュメントに新規作成して保存してください。</pre>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">2</div>
+        <div class="step-body">
+          <h4>理想の成果物が1回できたら、こう頼むだけ</h4>
+          <p><b>手順1と同じチャットの続きで</b>送ってください（新しいチャットを開くと、やり取りが参照できません）。スキルクリエイター（スキルを作るためのスキル）が Claude の公式から出ていて、Claude Code と Codex には最初から入っているので、設定をしなくても誰でも使えます。日本語で頼むだけで作ってくれます。足りない情報だけ質問されるので、答えたら完成です。</p>
+          <div class="prompt">
+            <div class="prompt-head">
+              <b>スキル化プロンプト</b>
+              <button class="copy" type="button">コピー</button>
+            </div>
+            <pre>これまでのやり取りを全部参照して、この作業をスキル化してください</pre>
+          <p style="font-size:13.5px;color:var(--muted)">※ 一言で呼びたい名前がある時は、続けて「『Xのリサーチして』と言ったら発動するようにして」と足しておくと確実です。</p>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">3</div>
+        <div class="step-body">
+          <h4>次からは、一言で発動する</h4>
+          <p>これで次からは、下の一言だけでこのスキルが発動して、さっきの流れを全部やってくれます。これが必殺コマンドです。発動しない時は、スキル化した時にAIが教えてくれたスキル名で呼ぶか、「さっき作ったXリサーチのスキルを実行して」と言えばOKです。</p>
+          <div class="prompt">
+            <div class="prompt-head">
+              <b>作ったスキルを呼び出す一言</b>
+              <button class="copy" type="button">コピー</button>
+            </div>
+            <pre>Xのリサーチして</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>ここでのポイント</h3>
+      <ol class="takeaway">
+        <li><b>作るときは「1機能1スキル」</b><span>最初から万能なやつを作らない。1つの作業に1つのスキルです。</span></li>
+        <li><b>ズレがあったら、日本語でフィードバックしていく</b><span>「ここはこうして」と伝えるだけでスキルが直ります。回すほどズレが減っていきます。</span></li>
+        <li><b>作る → 使う → 直す</b><span>これを回せば回すほど賢くなっていきます。僕はこれで、今の時点で260本くらいスキルがあります。SNSも経理も動画編集も全部です。1本作るたびに、自分の仕事が1個AIに移っていく感覚です。</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ STEP6 ============ -->
+  <section class="sec" id="s6">
+    <p class="sec-label rv">STEP 06</p>
+    <h2 class="sec-title rv">定期自動実行（スキルを毎朝勝手に動かす）</h2>
+    <p class="sec-lead rv">スキルができても、自分で毎回実行していたら時間が取られます。完璧になったスキルは、決めた時間に自動で動かします。</p>
+
+    <div class="card rv">
+      <p>Claude Code には<b>スケジュール機能</b>（Claude Code デスクトップアプリの「スケジュール設定されたタスク」）があって、時間を決めて登録するだけです。登録は下のプロンプトをチャットで送るだけでOKです（アプリのスケジュール一覧の画面からも作れます）。例えば、STEP5で作った競合リサーチのスキルを毎朝8時に回るように登録すると、明日から毎朝、伸びている投稿のパターンが勝手に集まってきます。</p>
+      <div class="note"><b>Codex を使っている人へ：</b>この章の手順は Claude Code のスケジュール機能を前提に書いています。Codex の場合は、Codex の公式ドキュメントで定期実行にあたる機能を確認してください。</div>
+      <a class="toollink" href="https://code.claude.com/docs/ja/desktop-scheduled-tasks" target="_blank" rel="noopener">Claude Code スケジュール機能 公式ドキュメント</a>
+
+      <h3>手順</h3>
+      <div class="step">
+        <div class="step-no">1</div>
+        <div class="step-body">
+          <h4>スキルが「完璧になってから」登録する</h4>
+          <p>ズレたまま自動で回すと、ズレた成果物が毎日増えるだけです。STEP5の「作る → 使う → 直す」を何回か回して、安心して任せられる状態になってから登録します。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">2</div>
+        <div class="step-body">
+          <h4>時間を決めて、登録する</h4>
+          <p>Claude Code に、いつ・どのスキルを動かすかを日本語で頼めばOKです。</p>
+          <div class="prompt">
+            <div class="prompt-head">
+              <b>スケジュール登録プロンプト（資料用の例。時間とスキルは自分のものに書き換える）</b>
+              <button class="copy" type="button">コピー</button>
+            </div>
+            <pre>毎朝8時に「Xのリサーチして」を自動で実行するように、スケジュール機能に登録してください。</pre>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">3</div>
+        <div class="step-body">
+          <h4>結果を確認して、ズレていたらスキルに戻す</h4>
+          <p>回せば回すほど積み上がっていくのが定期実行です。リサーチのスキルなら、毎日回るから精度が上がり続けて、常に最新の情報になります。ライティングなら、今伸びているものと時事ネタをもとにコンテンツが作れます。</p>
+        </div>
+      </div>
+
+      <div class="note warn"><b>注意：</b>「寝てる間も動いてる？」と聞かれますが、正確には<b>パソコンと Claude が起動している間</b>は勝手に動く、という感じです。パソコンを閉じている間は動きません。</div>
+
+      <div class="example">僕の環境では、今の時点で32本の自動実行が設定されています。受講生の方でも、レンタカーの事業をされている方が Claude Code と Codex でインスタ投稿や切り抜き動画をほぼ全自動化して、月の売上も640万円を超えたと報告をくれました。</div>
+    </div>
+  </section>
+
+  <!-- ============ STEP7 ============ -->
+  <section class="sec" id="s7">
+    <p class="sec-label rv">STEP 07</p>
+    <h2 class="sec-title rv">自律思考（名前だけ知っておく）</h2>
+    <p class="sec-lead rv">AI同士が会話して、自律的に動く世界。今は名前を知っておくだけで大丈夫です。</p>
+
+    <div class="card rv">
+      <p>最後、STEP7は自律思考です。AI同士が会話して自律的に動く世界で、<b>OpenClaw</b> や <b>ヘルメスエージェント（Hermes Agent）</b> といったツールが出てきています。今は名前を知っておくだけで大丈夫です。また今度ガッツリやります。</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>ツール</th><th>どんなものか（公式の説明の要約）</th><th>公式</th></tr></thead>
+          <tbody>
+            <tr><td><b>OpenClaw</b></td><td>自分のパソコンで動く、オープンソース（中身が公開されていて誰でも無料で使える形）のパーソナルAIアシスタント。WhatsApp・Telegramなど普段使うチャットアプリから話しかけて、メール整理やカレンダー管理などを実行させる</td><td><a href="https://openclaw.ai/" target="_blank" rel="noopener">openclaw.ai</a></td></tr>
+            <tr><td><b>Hermes Agent</b><br>（ヘルメスエージェント）</td><td>Nous Research 製のオープンソースAIエージェント。使うほど経験からスキルを自動生成して育っていく</td><td><a href="https://hermes-agent.nousresearch.com/" target="_blank" rel="noopener">hermes-agent.nousresearch.com</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;color:var(--muted)">※ 2026年8月時点。どちらも進化が速い領域なので、触る時は公式を見てください。</p>
+      <p>ただ、ああいうツールも結局、<span class="hl">ローカルを見るAI</span>なんですよ。STEP6までで、ローカルにスキルとナレッジを作っておけば、次の波が来てもそのまま乗れます。</p>
+      <div class="note"><b>ポイント：</b>STEP7を急いで触る必要はありません。STEP3のフォルダとナレッジ、STEP5のスキルが手元にあること。それが次の波に乗るための準備そのものです。</div>
+    </div>
+  </section>
+
+  <!-- ============ まとめ ============ -->
+  <section class="sec" id="s8">
+    <p class="sec-label rv">SUMMARY</p>
+    <h2 class="sec-title rv">まとめ：7STEPチェックリスト</h2>
+    <p class="sec-lead rv">この順番でやれば、AIを触ったことがない人でも迷わずに進めます。</p>
+
+    <div class="card rv">
+      <h3>7STEP チェックリスト</h3>
+      <ul class="check">
+        <li><b>STEP1 AIに慣れる</b>：ウェブのAIと話した／Claude Code か Codex を触った</li>
+        <li><b>STEP2 ツール理解</b>：Typeless・NotebookLM など、まわりの便利ツールを知った</li>
+        <li><b>STEP3 環境構築</b>：AI専用フォルダを作った／一撃構築プロンプトで中を分けた／情報を入れた</li>
+        <li><b>STEP4 ツールを繋ぐ</b>：使いたいツールのAPI・MCPを繋いだ（鍵は .env に）</li>
+        <li><b>STEP5 スキル構築</b>：一度やった作業をスキル化した</li>
+        <li><b>STEP6 定期自動実行</b>：完璧になったスキルをスケジュール登録した</li>
+        <li><b>STEP7 自律思考</b>：OpenClaw・ヘルメスエージェントの名前を知っておく</li>
+      </ul>
+
+      <h3>今日やること（この2つだけ）</h3>
+      <ol class="takeaway">
+        <li><b>Claude Code か Codex を入れる</b><span>公式サイトからダウンロードして、指示どおりに進めるだけ。まだ課金していない人は、STEP1のウェブのAIと話す練習と、フォルダを自分で1個作るところまででOKです。</span></li>
+        <li><b>AI専用フォルダを1個作る</b><span>フォルダを1個作るだけです。作れたら、STEP3の一撃構築プロンプトへ。</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ [C:締めCTA] ============ -->
+  <section class="closing rv">
+    <div class="closing-inner">
+      <h2>7STEPを回しはじめたら、次の一歩へ</h2>
+      <p>この資料の7STEPをそのまま実行すれば、今日からAIの自動化を始められます。さらに深く学びたい方へ、公式LINEから参加できる「AI×SNS攻略 月額0円コミュニティ」（LINEオープンチャット）をご用意しています。追加12大特典に加えて、最新のAI×マーケティング情報を僕がキャッチアップして配信しています。</p>
+      <p>コミュニティでは、累計3,000名以上が参加した『AI駆動型コンテンツビジネス 0→100完全攻略セミナー』にも完全無料でご招待しています。参加で豪華20大特典がもらえてしまうので、ぜひこちらもご活用ください。</p>
+
+      <div class="bonus">
+        <div><b>10大特典</b><span>公式LINE（受け取り済み）</span></div>
+        <div><b>追加12大特典</b><span>AI×SNS攻略 月額0円コミュニティ</span></div>
+        <div><b>20大特典</b><span>0→100完全攻略セミナー</span></div>
+      </div>
+
+      <a class="btn" href="https://utage-system.com/line/open/ttS3H5oAa7lk?mtid=gb3g3fVXON1c" target="_blank" rel="noopener">月額0円コミュニティの案内を受け取る</a>
+      <p style="margin-top:14px;font-size:13px;opacity:.8">※ オープンチャットへの参加案内は、公式LINEのトークに届きます。</p>
+    </div>
+  </section>
+
+  <p class="foot">星川ユウヤ</p>
+</div>
+
+<button class="totop" id="totop" type="button" aria-label="ページ上部へ戻る">↑</button>
+
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* [C:進捗バー] + [C:トップへ戻る] */
+  var bar = document.getElementById('bar');
+  var totop = document.getElementById('totop');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (bar) bar.style.width = p + '%';
+    if (totop) totop.classList.toggle('show', h.scrollTop > 640);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  if (totop) totop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+  });
+
+  /* [C:出現アニメーション] 画面に入ったらふわっと表示 */
+  var rv = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -12% 0px', threshold:0.08});
+    rv.forEach(function(el){ io.observe(el); });
+  } else {
+    rv.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* [C:目次] + [C:サイド進捗ナビ] 現在地ハイライト */
+  var secs = Array.prototype.slice.call(document.querySelectorAll('section.sec[id]'));
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.sidenav a'));
+  if (secs.length && 'IntersectionObserver' in window){
+    var spy = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        var id = '#' + e.target.id;
+        tocLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === id); });
+        navLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === id); });
+      });
+    }, {rootMargin:'-45% 0px -45% 0px'});
+    secs.forEach(function(s){ spy.observe(s); });
+  }
+
+  /* [C:プロンプト枠] コピーボタン */
+  document.querySelectorAll('.prompt .copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pre = btn.closest('.prompt').querySelector('pre');
+      if(!pre) return;
+      var text = pre.innerText;
+      var done = function(){
+        var old = btn.textContent;
+        btn.textContent = 'コピーしました';
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1600);
+      };
+      if (navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+      function fallback(){
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly','');
+        ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch(e){}
+        document.body.removeChild(ta);
+      }
+    });
+  });
+
+  if (reduce) return;
+
+  /* [C:ヒーロー] マウス追従の光。触っていない時は中央 */
+  var hero = document.getElementById('hero');
+  var glow = document.getElementById('glow');
+  if (hero && glow){
+    hero.addEventListener('pointermove', function(ev){
+      var r = hero.getBoundingClientRect();
+      glow.style.setProperty('--mx', ((ev.clientX - r.left) / r.width * 100) + '%');
+      glow.style.setProperty('--my', ((ev.clientY - r.top) / r.height * 100) + '%');
+    });
+  }
+
+  /* [C:3Dホバーカード] 指で触る端末では無効（横スクロールを出さないため） */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+    document.querySelectorAll('.tilt').forEach(function(el){
+      el.addEventListener('pointermove', function(ev){
+        var r = el.getBoundingClientRect();
+        var rx = ((ev.clientY - r.top) / r.height - .5) * -5;
+        var ry = ((ev.clientX - r.left) / r.width - .5) * 5;
+        el.style.transform = 'perspective(760px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-3px)';
+      });
+      el.addEventListener('pointerleave', function(){ el.style.transform = ''; });
+    });
+  }
+})();
+</script>
+</body>
+</html>
